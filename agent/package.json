@@ -24,7 +24,7 @@
     "dotenv": "^16.6.1",
     "openai": "^6.33.0",
     "solana-agent-kit": "^2.0.10",
-    "zod": "^4.3.6"
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
