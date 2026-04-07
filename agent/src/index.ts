@@ -4,7 +4,8 @@ dotenv.config();
 
 import { Connection, Keypair, PublicKey, SystemProgram } from '@solana/web3.js';
 import bs58 from 'bs58';
-import { Program, AnchorProvider, Wallet, BN } from '@coral-xyz/anchor';
+import pkg from '@coral-xyz/anchor';
+const { Program, AnchorProvider, Wallet, BN } = pkg;
 import { getAssociatedTokenAddressSync, TOKEN_PROGRAM_ID } from '@solana/spl-token';
 import { CascadingWeatherProvider, WeatherData, evaluateTriggers } from './plugins/weatherPlugin.js';
 import { CascadingNdviProvider, NdviStatistics, evaluateNdviTrigger, createFieldPolygon } from './plugins/satellitePlugin.js';
@@ -12,6 +13,7 @@ import { makePayoutDecision, generateRecommendation } from './plugins/insuranceP
 import { TelegramNotificationService } from './plugins/telegramPlugin.js';
 import { hashWeatherReport, hashNdviReport, hashPayout, hashRecommendation, logAttestation, detectEnvironment } from './teeAttestation.js';
 import { MemoryManager } from './memoryManager.js';
+import './bot.js'; // Запускаем Telegram Бота (Telegraf) параллельно с циклом Оракула
 import { readFileSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -168,7 +170,7 @@ async function monitorPolicies(): Promise<void> {
   try {
     // 1. Получение всех полисов нашего пула безопасно (без .all() который падает на мусорных аккаунтах)
     console.log('📡 Чтение пула из Devnet...');
-    const poolAdmin = new PublicKey("GA6jvomaWL41c5aPX8GnHxq2b2DD9h9GyxZpxSVbZYbr");
+    const poolAdmin = new PublicKey("9GY2ra6AoUxs78HS9LAn5QbnCaogsZBvMvvMZgj1cG83");
     const [poolPda] = getPoolPDA(poolAdmin);
     const pool = await (program.account as any).insurancePool.fetch(poolPda);
     const policyCount = pool.policyCount?.toNumber?.() ?? pool.policyCount;
@@ -376,10 +378,10 @@ async function monitorPolicies(): Promise<void> {
             const ndviTeeHash = hashNdviReport({
               oraclePublicKey: keypair.publicKey.toBase58(),
               policyPubkey: policy.pubkey.toBase58(),
-              meanNdviX10000: Math.round(ndviStats.mean * 10000),
-              minNdviX10000: Math.round(ndviStats.min * 10000),
-              maxNdviX10000: Math.round(ndviStats.max * 10000),
-              stdDevX10000: Math.round(ndviStats.stdDev * 10000),
+              meanNdviX10000: Math.round(Math.max(0, ndviStats.mean) * 10000),
+              minNdviX10000: Math.round(Math.max(0, ndviStats.min) * 10000),
+              maxNdviX10000: Math.round(Math.max(0, ndviStats.max) * 10000),
+              stdDevX10000: Math.round(Math.max(0, ndviStats.stdDev) * 10000),
               historicalMeanX10000: Math.round(0.70 * 10000),
               satelliteSource: 'AgroMonitoring',
               timestamp: nowTs,
@@ -392,10 +394,10 @@ async function monitorPolicies(): Promise<void> {
               
               await program.methods
                 .submitNdviReport(
-                  Math.round(ndviStats.mean * 10000),
-                  Math.round(ndviStats.min * 10000),
-                  Math.round(ndviStats.max * 10000),
-                  Math.round(ndviStats.stdDev * 10000),
+                  Math.round(Math.max(0, ndviStats.mean) * 10000),
+                  Math.round(Math.max(0, ndviStats.min) * 10000),
+                  Math.round(Math.max(0, ndviStats.max) * 10000),
+                  Math.round(Math.max(0, ndviStats.stdDev) * 10000),
                   Math.round(0.70 * 10000),
                   { agroMonitoring: {} },
                   ndviTeeHash
