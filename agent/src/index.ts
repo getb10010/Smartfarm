@@ -43,7 +43,7 @@ const BANNER = `
 ╚═══════════════════════════════════════════════════════════════╝
 `;
 
-const MONITOR_INTERVAL_MS = 60 * 60 * 1000; // 1 час между циклами мониторинга
+const MONITOR_INTERVAL_MS = 5 * 1000; // 5 секунд для хакатон-демо!
 const RPC_URL = process.env.HELIUS_RPC_URL || 'https://api.devnet.solana.com';
 const PRIVATE_KEY = process.env.SOLANA_PRIVATE_KEY;
 const PROGRAM_ID = new PublicKey(process.env.CONTRACT_PROGRAM_ID || process.env.PROGRAM_ID || '2c4QahhgmCXWFDuPVsa6i7gBYSUn2DGTNPpXZXwjs21n');
@@ -170,7 +170,7 @@ async function monitorPolicies(): Promise<void> {
   try {
     // 1. Получение всех полисов нашего пула безопасно (без .all() который падает на мусорных аккаунтах)
     console.log('📡 Чтение пула из Devnet...');
-    const poolAdmin = new PublicKey("9GY2ra6AoUxs78HS9LAn5QbnCaogsZBvMvvMZgj1cG83");
+    const poolAdmin = new PublicKey('FCBQamh5j3PnSLkZVpepRDyzHoLL3nGbXDuaRyrVJkfY');
     const [poolPda] = getPoolPDA(poolAdmin);
     const pool = await (program.account as any).insurancePool.fetch(poolPda);
     const policyCount = pool.policyCount?.toNumber?.() ?? pool.policyCount;
