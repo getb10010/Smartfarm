@@ -1,0 +1,165 @@
+/* ---- Weather Page ---- */
+.weather-current {
+  padding: var(--space-5);
+  margin-bottom: var(--space-6);
+}
+
+.wc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--space-2);
+}
+
+.wc-temp {
+  font-size: var(--font-size-3xl);
+  font-weight: 800;
+  color: var(--color-info-400);
+  display: block;
+  line-height: 1;
+}
+
+.wc-feels {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.wc-icon {
+  font-size: 2.5rem;
+}
+
+.wc-location {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-4);
+}
+
+.wc-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-3);
+}
+
+.wc-metric {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-sm);
+}
+
+.wc-metric-label {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.wc-metric-val {
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+}
+
+/* ---- Forecast ---- */
+.forecast-card {
+  padding: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.forecast-day {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-3);
+  border-radius: var(--radius-sm);
+  transition: background var(--transition-fast);
+}
+
+.forecast-day:not(:last-child) {
+  border-bottom: 1px solid var(--color-divider);
+}
+
+.forecast-day--frost {
+  background: rgba(96, 165, 250, 0.06);
+}
+
+.forecast-day:hover {
+  background: var(--color-bg-card-hover);
+}
+
+.fd-day {
+  font-weight: 600;
+  width: 24px;
+  font-size: var(--font-size-sm);
+}
+
+.fd-date {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  width: 40px;
+}
+
+.fd-icon {
+  font-size: 1.25rem;
+}
+
+.fd-temps {
+  display: flex;
+  gap: var(--space-2);
+  flex: 1;
+}
+
+.fd-high {
+  font-weight: 700;
+  font-size: var(--font-size-sm);
+}
+
+.fd-low {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.fd-precip {
+  font-size: var(--font-size-xs);
+  color: var(--color-info-400);
+  min-width: 32px;
+  text-align: right;
+}
+
+.fd-ndvi {
+  font-size: var(--font-size-xs);
+  color: var(--color-primary-400);
+}
+
+/* ---- Data Sources ---- */
+.data-sources {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.source-card {
+  padding: var(--space-4);
+}
+
+.source-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-1);
+}
+
+.source-name {
+  font-weight: 700;
+  font-size: var(--font-size-base);
+}
+
+.source-resolution {
+  font-size: var(--font-size-sm);
+  color: var(--color-primary-400);
+  font-weight: 600;
+  margin-bottom: var(--space-1);
+}
+
+.source-desc {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}

@@ -1,0 +1,21 @@
+{
+  "name": "smartfarmer-gelato-automation",
+  "version": "1.0.0",
+  "description": "SmartFarmer v3 Gelato Web3 Function",
+  "main": "web3-function.ts",
+  "scripts": {
+    "test": "npx w3f test web3-function.ts",
+    "deploy": "npx w3f deploy web3-function.ts"
+  },
+  "dependencies": {
+    "@coral-xyz/anchor": "^0.32.1",
+    "@gelatonetwork/web3-functions-sdk": "^2.4.0",
+    "@solana/web3.js": "^1.98.4",
+    "axios": "^1.6.0",
+    "ethers": "^5.7.2"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.0"
+  }
+}

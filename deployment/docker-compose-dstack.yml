@@ -1,0 +1,25 @@
+# Phala dstack Testnet Compose File
+# Этот файл используется утилитой `dstack deploy` для запуска оракула
+# внутри защищенного аппаратного анклава Intel SGX.
+version: '3.8'
+
+services:
+  smartfarmer-oracle:
+    # Замените на публичный образ, загруженный в реестр в шаге 2 деплоя
+    image: ghcr.io/your-username/smartfarmer-oracle:v3-testnet
+    environment:
+      - TEE_MODE=dstack_testnet
+      - NODE_ENV=production
+      
+      # [VITAL IN DSTACK] 
+      # Dstack автоматически внедряет переменные виртуальной среды TEE
+      # Ключи ниже должны инжектиться через dstack secrets, а не хардкодиться!
+      # Пример: dstack secrets set PRIVATE_KEY "ваш_ключ"
+      - PRIVATE_KEY=${PRIVATE_KEY}
+      - RPC_URL=${RPC_URL:-https://api.devnet.solana.com}
+      - AGROMONITORING_API_KEY=${AGROMONITORING_API_KEY}
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - GROQ_API_KEY=${GROQ_API_KEY}
+    
+    # Рестарт в случае прерывания (cron emulation in long-running job)
+    restart: always

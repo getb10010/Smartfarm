@@ -1,0 +1,81 @@
+name: '🌾 SmartFarmer Oracle — Automated Monitoring'
+
+on:
+  schedule:
+    # Запуск каждый час — gasless мониторинг полисов
+    - cron: '0 * * * *'
+  workflow_dispatch:
+    # Ручной запуск для тестирования
+    inputs:
+      run_mode:
+        description: 'Execution mode'
+        required: false
+        default: 'single'
+        type: choice
+        options:
+          - single
+          - continuous
+
+env:
+  NODE_VERSION: '22'
+
+jobs:
+  monitor-policies:
+    name: '🔍 Monitor Active Policies'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: '📥 Checkout Repository'
+        uses: actions/checkout@v4
+
+      - name: '🟢 Setup Node.js'
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: agent/package-lock.json
+
+      - name: '📦 Install Agent Dependencies'
+        working-directory: agent
+        run: npm ci
+
+      - name: '🤖 Run Oracle Agent (Single Cycle)'
+        working-directory: agent
+        env:
+          # Secrets — настраиваются в Settings → Secrets → Actions
+          SOLANA_PRIVATE_KEY: ${{ secrets.SOLANA_PRIVATE_KEY }}
+          HELIUS_RPC_URL: ${{ secrets.HELIUS_RPC_URL }}
+          METGIS_API_KEY: ${{ secrets.METGIS_API_KEY }}
+          AMBEE_API_KEY: ${{ secrets.AMBEE_API_KEY }}
+          EOSDA_API_KEY: ${{ secrets.EOSDA_API_KEY }}
+          
+          # Contract
+          CONTRACT_PROGRAM_ID: ${{ vars.CONTRACT_PROGRAM_ID || '2c4QahhgmCXWFDuPVsa6i7gBYSUn2DGTNPpXZXwjs21n' }}
+          
+          # Single run mode — выполнить один цикл и завершиться
+          ORACLE_SINGLE_RUN: 'true'
+          
+          # TEE markers
+          TEE_MODE: 'github_actions'
+          
+          # Dialect notifications
+          DIALECT_ENABLED: ${{ vars.DIALECT_ENABLED || 'false' }}
+        run: |
+          echo "═══════════════════════════════════════════════════════"
+          echo "  🌾 SmartFarmer v3 — Automated Oracle Monitoring"
+          echo "  ⏰ Triggered by: ${{ github.event_name }}"
+          echo "  🕐 Time: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+          echo "═══════════════════════════════════════════════════════"
+          
+          npx tsx src/index.ts
+
+      - name: '📊 Report Status'
+        if: always()
+        run: |
+          if [ "${{ job.status }}" == "success" ]; then
+            echo "✅ Oracle cycle completed successfully"
+          else
+            echo "❌ Oracle cycle failed — check logs above"
+          fi
+          echo "Next run: $(date -u -d '+1 hour' '+%Y-%m-%d %H:%M:%S UTC' 2>/dev/null || echo 'in ~1 hour')"

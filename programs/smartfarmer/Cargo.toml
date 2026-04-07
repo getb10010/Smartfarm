@@ -1,0 +1,27 @@
+[package]
+name = "smartfarmer"
+version = "0.1.0"
+description = "SmartFarmer v3 — Decentralized Parametric Crop Insurance on Solana"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "smartfarmer"
+
+[features]
+no-entrypoint = []
+no-idl = []
+no-log-ix-name = []
+cpi = ["no-entrypoint"]
+default = []
+idl-build = ["anchor-lang/idl-build"]
+
+[dependencies]
+anchor-lang = { workspace = true, features = ["init-if-needed"] }
+anchor-spl = { workspace = true }
+
+[profile.release]
+opt-level="z"
+lto=true
+codegen-units=1
+strip=true

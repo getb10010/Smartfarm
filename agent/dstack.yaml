@@ -1,0 +1,48 @@
+# Конфигурация для развертывания в Phala Network TEE (Confidential AI)
+# Использует dstack (Flashbots framework) для обеспечения TEE аттестации
+name: smartfarmer-oracle-v3
+version: "3.0"
+
+# Контейнер внутри анклава Intel SGX
+services:
+  oracle:
+    build: .
+    image: smartfarmer/oracle:1.0
+    restart: always
+    environment:
+      - NODE_ENV=production
+      - TEE_ENV=phala_tee
+      # Приватные ключи передаются через защищенные KMS (Key Management System)
+      - SOLANA_RPC_URL=sec_rpc_url
+      - SOLANA_PRIVATE_KEY=sec_priv_key
+      - OPENROUTER_API_KEY=sec_openrouter_key
+      - TELEGRAM_BOT_TOKEN=sec_tg_token
+      - TELEGRAM_CHAT_ID=sec_tg_chat
+      - SH_CLIENT_ID=sec_sh_client
+      - SH_CLIENT_SECRET=sec_sh_secret
+
+    # Выделенные ресурсы для ИИ-агента + SGX анклав
+    deploy:
+      resources:
+        limits:
+          tx_sgx: 1024M
+          cpus: "2.0"
+          memory: 2048M
+
+# Приватные ключи (Secrets) инжектируются в анклав после загрузки
+# и зашифрованы так, чтобы администратор ноды не мог их извлечь.
+secrets:
+  sec_rpc_url:
+    source: gcp_kms
+  sec_priv_key:
+    source: gcp_kms
+  sec_openrouter_key:
+    source: vault
+  sec_tg_token:
+    source: vault
+  sec_tg_chat:
+    source: vault
+  sec_sh_client:
+    source: vault
+  sec_sh_secret:
+    source: vault

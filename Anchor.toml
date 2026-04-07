@@ -1,0 +1,20 @@
+[features]
+seeds = false
+skip-lint = false
+
+[programs.localnet]
+smartfarmer = "2c4QahhgmCXWFDuPVsa6i7gBYSUn2DGTNPpXZXwjs21n"
+
+[programs.devnet]
+smartfarmer = "2c4QahhgmCXWFDuPVsa6i7gBYSUn2DGTNPpXZXwjs21n"
+
+[registry]
+url = "https://api.apr.dev"
+
+[provider]
+cluster = "https://devnet.helius-rpc.com/?api-key=b7b4abff-7ed7-44f8-9b05-f21112d18bb3"
+wallet = "~/.config/solana/smartfarmer-deployer.json"
+
+[scripts]
+test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"
+

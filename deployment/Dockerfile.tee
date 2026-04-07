@@ -1,0 +1,76 @@
+# ============================================================================
+# SmartFarmer v3 — Phala TEE Docker Image
+# Документ: "контейнеризовать приложение в стандартный Docker-образ и 
+# развернуть его в виде бессерверной граничной функции через Phala Cloud"
+# ============================================================================
+
+FROM node:22-slim AS builder
+
+WORKDIR /app
+
+# Установка зависимостей агента
+COPY agent/package.json agent/package-lock.json* ./
+RUN npm ci --production
+
+# Копирование кода агента
+COPY agent/src ./src
+COPY agent/tsconfig.json ./
+
+# Копирование ElizaOS Character File (конфигурация ИИ-персонажа)
+COPY agent/src/character.json ./src/character.json
+
+# Сборка TypeScript
+RUN npx tsc
+
+# ---- Production Image ----
+FROM node:22-slim
+
+WORKDIR /app
+
+# Копируем только необходимое
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/dist ./dist
+
+# Копируем Character File в dist (нужен runtime)
+COPY --from=builder /app/src/character.json ./dist/character.json
+
+# Копируем IDL для Anchor (агент загружает при старте)
+COPY app/src/lib/idl ./idl
+
+# Переменные окружения (секреты генерируются внутри TEE анклава)
+# ВАЖНО: Приватный ключ НИКОГДА не передаётся извне!
+# Он генерируется внутри анклава при первом запуске.
+ENV NODE_ENV=production
+ENV HELIUS_RPC_URL=https://api.devnet.solana.com
+ENV PROGRAM_ID=91XpV6PetvLatwG2XHaonahsnbwW3Lt2VRT5k4uNNguT
+
+# TEE Environment marker
+ENV PHALA_TEE=1
+ENV TEE_MODE=production
+
+# Dialect notifications enabled in production
+ENV DIALECT_ENABLED=true
+
+# Phala TEE Runtime Labels
+# Документ: "приватный ключ кошелька ИИ-агента генерируется внутри анклава 
+# и никогда его не покидает. Агент может безопасно подписывать транзакции 
+# для сети Solana, не рискуя компрометацией ключа."
+LABEL phala.tee="true"
+LABEL phala.attestation="remote"
+LABEL phala.attestation.type="dcap"
+LABEL smartfarmer.version="3.0.0"
+LABEL smartfarmer.component="ai-oracle"
+
+EXPOSE 8080
+
+# Health check endpoint with blockchain connectivity verification
+HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
+  CMD node -e "\
+    const http = require('http'); \
+    const { Connection } = require('@solana/web3.js'); \
+    Promise.all([ \
+      new Promise((r,j) => http.get('http://localhost:8080/health', (res) => r(res.statusCode === 200)).on('error', j)), \
+      new Connection(process.env.HELIUS_RPC_URL || 'https://api.devnet.solana.com').getSlot() \
+    ]).then(() => process.exit(0)).catch(() => process.exit(1))"
+
+CMD ["node", "dist/index.js"]

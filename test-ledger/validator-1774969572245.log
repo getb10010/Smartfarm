@@ -1,0 +1,19 @@
+[2026-03-31T15:06:12.248120700Z INFO  solana_test_validator] agave-validator 3.1.12 (src:6c1ba346; feat:4140108451, client:Agave)
+[2026-03-31T15:06:12.248401100Z INFO  solana_test_validator] Starting validator with: ArgsOs {
+        inner: [
+            "C:\\Users\\User\\.local\\share\\solana\\install\\active_release\\bin\\solana-test-validator.exe",
+        ],
+    }
+[2026-03-31T15:06:12.248478100Z WARN  solana_perf] CUDA is disabled
+[2026-03-31T15:06:12.248508500Z INFO  solana_perf] AVX detected
+[2026-03-31T15:06:12.248535000Z INFO  solana_perf] AVX2 detected
+[2026-03-31T15:06:12.254994000Z INFO  solana_faucet::faucet] Faucet started. Listening on: 0.0.0.0:9900
+[2026-03-31T15:06:12.256536700Z INFO  agave_validator::admin_rpc_service] started admin rpc service!
+[2026-03-31T15:06:12.257714000Z INFO  solana_test_validator] Feature for mustRekeyVm2QHYB3JPefBiU4BY3Z6JkW2k3Scw5GWP deactivated
+[2026-03-31T15:06:12.257787100Z INFO  solana_faucet::faucet] Faucet account address: 626NZwjKJMtCPKHzppwQfFJ96GnHBGADn92fYJtH5T9L
+[2026-03-31T15:06:12.280062300Z INFO  solana_ledger::blockstore] Opening blockstore at "test-ledger\\rocksdb"
+[2026-03-31T15:06:12.283244000Z WARN  solana_ledger::blockstore_db] Unable to detect Rocks columns: Error { message: "IO error: No such file or directory: Failed to open NewSequentialFiletest-ledger\\rocksdb/CURRENT: The system cannot find the file specified.\r\n" }
+[2026-03-31T15:06:12.537434600Z INFO  solana_ledger::blockstore] Opening blockstore done; blockstore open took 257ms
+[2026-03-31T15:06:12.542646400Z INFO  solana_metrics::metrics] metrics disabled: environment variable not found
+[2026-03-31T15:06:12.543166200Z INFO  solana_metrics::metrics] datapoint: shred_insert_is_full slot=0i total_time_ms=0i last_index=31i num_repaired=0i num_recovered=0i
+[2026-03-31T15:06:12.687079400Z INFO  agave_snapshots::unarchive] Extracting "test-ledger\\genesis.tar.bz2"...

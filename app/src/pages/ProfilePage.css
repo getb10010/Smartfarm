@@ -1,0 +1,112 @@
+/* ---- Profile Wallet ---- */
+.profile-wallet {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-5);
+}
+
+.wallet-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.wallet-info {
+  flex: 1;
+}
+
+.wallet-info h3 {
+  font-size: var(--font-size-base);
+  font-weight: 700;
+}
+
+.wallet-info p {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+/* ---- AI Section ---- */
+.ai-section {
+  display: flex;
+  gap: var(--space-4);
+  padding: var(--space-5);
+}
+
+.ai-avatar {
+  font-size: 2.5rem;
+  flex-shrink: 0;
+}
+
+.ai-info h3 {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  margin-bottom: var(--space-2);
+}
+
+.ai-desc {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  margin-bottom: var(--space-3);
+}
+
+.ai-capabilities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.ai-cap {
+  padding: var(--space-1) var(--space-3);
+  background: rgba(34, 197, 94, 0.08);
+  border: 1px solid rgba(34, 197, 94, 0.15);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  color: var(--color-primary-400);
+}
+
+/* ---- Tech Stack ---- */
+.tech-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.tech-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+}
+
+.tech-icon {
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+
+.tech-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.tech-name {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+}
+
+.tech-desc {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+/* ---- Version ---- */
+.version-info {
+  text-align: center;
+  padding: var(--space-8) var(--space-4);
+}
+
+.version-text {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  margin-top: var(--space-2);
+}

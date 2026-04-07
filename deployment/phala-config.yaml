@@ -1,0 +1,62 @@
+# ============================================================================
+# Phala Cloud Deployment Configuration
+# SmartFarmer v3 — AI Oracle TEE Deployment
+# 
+# Документ: "Платформа Phala Cloud и инструментарий dstack позволяют 
+# разработчикам развернуть приложение с помощью простых CLI-команд"
+# ============================================================================
+
+app:
+  name: smartfarmer-oracle
+  version: "3.0.0"
+  description: "SmartFarmer v3 Parametric Crop Insurance AI Oracle"
+
+# TEE Configuration
+tee:
+  # Тип анклава (Intel SGX, AMD SEV, NVIDIA H100)
+  enclave_type: "sgx"
+  
+  # Минимальные требования
+  resources:
+    cpu: 2
+    memory: "4Gi"
+    
+  # Remote Attestation
+  attestation:
+    enabled: true
+    type: "dcap"  # Data Center Attestation Primitives
+    # Публичный ключ контракта для проверки аттестации
+    verifier_program: "Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS"
+
+# Network Configuration
+network:
+  # Solana RPC (Helius для Devnet)
+  solana_rpc: "https://devnet.helius-rpc.com/?api-key=${HELIUS_API_KEY}"
+  # External APIs
+  allowed_outbound:
+    - "api.metgis.com"       # MetGIS (30м разрешение)
+    - "api.ambeedata.com"    # Ambee (500м разрешение)
+    - "api-connect.eos.com"  # EOSDA (NDVI спутниковые данные)
+    - "api.withleaf.io"      # Leaf API (альтернативный агрегатор)
+    - "api.devnet.solana.com"
+    - "mainnet.helius-rpc.com"
+
+# Secrets (injected at runtime, never in image)
+secrets:
+  - METGIS_API_KEY
+  - AMBEE_API_KEY
+  - EOSDA_API_KEY
+  - HELIUS_API_KEY
+  # SOLANA_PRIVATE_KEY генерируется ВНУТРИ анклава!
+
+# Monitoring
+monitoring:
+  health_endpoint: "/health"
+  metrics_endpoint: "/metrics"
+  log_level: "info"
+
+# Scaling
+scaling:
+  min_replicas: 1
+  max_replicas: 3
+  # Документ: "Децентрализованная сеть воркеров, резервирование узлов"

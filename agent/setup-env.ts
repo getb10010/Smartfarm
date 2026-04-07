@@ -1,0 +1,1 @@
+import fs from 'fs'; import bs58 from 'bs58'; const key = JSON.parse(fs.readFileSync('C:/Users/User/.config/solana/smartfarmer-deployer.json', 'utf8')); fs.appendFileSync('agent/.env', '\nSOLANA_PRIVATE_KEY=' + bs58.encode(key)); console.log('? Key saved to agent/.env');

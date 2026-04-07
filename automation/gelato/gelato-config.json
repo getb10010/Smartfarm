@@ -1,0 +1,21 @@
+{
+  "name": "smartfarmer-gelato-monitor",
+  "version": "3.0.0",
+  "description": "Gelato Web3 Function — Decentralized off-chain policy monitoring",
+  "web3Function": {
+    "runtime": "node-22",
+    "schedule": {
+      "cron": "0 * * * *",
+      "comment": "Run every hour — gasless monitoring, pay gas only on trigger"
+    },
+    "storage": {
+      "type": "ipfs"
+    },
+    "networks": ["solana-devnet", "solana-mainnet"]
+  },
+  "metadata": {
+    "project": "SmartFarmer v3",
+    "component": "Parametric Crop Insurance Monitor",
+    "description_ru": "Децентрализованный мониторинг полисов — Gelato сеть воркеров выполняет проверку метеоданных off-chain, оплата газа только при срабатывании триггера"
+  }
+}

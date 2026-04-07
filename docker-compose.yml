@@ -1,0 +1,55 @@
+# ============================================================================
+# SmartFarmer v3 — Docker Compose (Self-Hosted Deployment)
+#
+# Запуск:  docker compose up -d
+# Логи:    docker compose logs -f oracle
+# Стоп:    docker compose down
+# ============================================================================
+
+services:
+  oracle:
+    container_name: smartfarmer-oracle
+    build:
+      context: .
+      dockerfile: deployment/Dockerfile.tee
+    restart: unless-stopped
+    environment:
+      # ─── Solana ───
+      SOLANA_PRIVATE_KEY: ${SOLANA_PRIVATE_KEY}
+      HELIUS_RPC_URL: ${HELIUS_RPC_URL:-https://api.devnet.solana.com}
+      CONTRACT_PROGRAM_ID: ${CONTRACT_PROGRAM_ID:-2c4QahhgmCXWFDuPVsa6i7gBYSUn2DGTNPpXZXwjs21n}
+      
+      # ─── Data Provider API Keys ───
+      METGIS_API_KEY: ${METGIS_API_KEY:-}
+      AMBEE_API_KEY: ${AMBEE_API_KEY:-}
+      EOSDA_API_KEY: ${EOSDA_API_KEY:-}
+      
+      # ─── Environment ───
+      NODE_ENV: production
+      TEE_MODE: ${TEE_MODE:-docker}
+      DIALECT_ENABLED: ${DIALECT_ENABLED:-false}
+      
+      # ─── Monitoring ───
+      MONITOR_INTERVAL_MS: ${MONITOR_INTERVAL_MS:-3600000}
+    
+    ports:
+      - "${ORACLE_PORT:-8080}:8080"
+    
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:8080/health', (r) => process.exit(r.statusCode === 200 ? 0 : 1)).on('error', () => process.exit(1))"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M

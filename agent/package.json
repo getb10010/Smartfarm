@@ -1,0 +1,34 @@
+{
+  "name": "smartfarmer-agent",
+  "version": "3.0.0",
+  "description": "SmartFarmer v3 AI Oracle Agent - ElizaOS + Solana Agent Kit",
+  "main": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@ai-sdk/groq": "^3.0.32",
+    "@ai-sdk/openai": "^3.0.49",
+    "@coral-xyz/anchor": "^0.29.0",
+    "@dialectlabs/sdk": "^2.0.0-beta.7",
+    "@elizaos/core": "latest",
+    "@elizaos/plugin-solana": "latest",
+    "@solana/spl-token": "^0.4.14",
+    "@solana/web3.js": "^1.98.4",
+    "ai": "^6.0.142",
+    "axios": "^1.14.0",
+    "bs58": "^6.0.0",
+    "dotenv": "^16.6.1",
+    "openai": "^6.33.0",
+    "solana-agent-kit": "^2.0.10",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.16.0",
+    "typescript": "^5.5.0"
+  }
+}
